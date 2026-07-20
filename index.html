@@ -482,31 +482,26 @@
         </div>
 
         <!-- QR Code -->
-        <div class="qr-wrap">
-          <div class="qr-card">
-            <h3>QR Code</h3>
-            <p class="muted" style="margin:0;">
-              سيتم فتح الصفحة مباشرة عند المسح
-            </p>
+       <div class="qr-card">
+  <h3>QR Code</h3>
+  <p class="muted" style="margin:0;">
+    سيتم فتح الصفحة مباشرة عند المسح
+  </p>
 
-            <!--
-              اختر QR الذي يلائم:
-              - الأفضل: QR من نوع "URL" (لينك http/https) لأنه يفتح صفحة مباشرة في أغلب الهواتف.
-              - ضع رابطك في المتغير QR_URL ثم أنشئ QR عليه (أو ضع qrcode.png مطابقًا للرابط).
-            -->
-            <script>
-              // ✅ غيّر الرابط هنا:
-              const QR_URL = "https://example.com/your-page"; // <-- ضع رابط صفحتك هنا
-              // ملاحظة: لتفعيل "يفتح مباشرة"، لازم QR نفسه يحتوي نفس الرابط.
-              // بما أنك تستخدم صورة qrcode.png، يجب أن تكون هذه الصورة مولدة لنفس QR_URL.
-            </script>
+  <script>
+    const QR_URL = "https://contactdrauto-web.github.io/dr-auto/"; // ضع رابط موقعك هنا
+  </script>
 
-            <!-- ضع qrcode.png مولد على رابط URL أعلاه -->
-            <a id="qrLink" href="https://example.com/your-page" target="_blank" rel="noopener noreferrer" aria-label="Open QR destination">
-              <img class="qr-img" src="qrcode.png" alt="QR Code" />
-            </a>
-          </div>
-        </div>
+  <a id="qrLink" href="https://contactdrauto-web.github.io/dr-auto/" target="_blank" rel="noopener noreferrer" aria-label="Open QR destination" style="display:block; margin-top:10px;">
+    <img class="qr-img" id="qrImg" alt="QR Code" style="display:block;" />
+  </a>
+
+  <script>
+    document.getElementById('qrLink').href = QR_URL;
+    document.getElementById('qrImg').src =
+      "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(QR_URL);
+  </script>
+</div>
       </section>
 
       <section class="packages">
