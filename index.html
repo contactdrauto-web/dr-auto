@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="ar">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dr Auto | Car Mechanics Expert</title>
+
+    <style>
+      :root{
+        --bg0:#050608;
+        --card: rgba(10, 12, 16, 0.72);
+        --stroke: rgba(255,255,255,0.12);
+        --text: rgba(255,255,255,0.92);
+        --muted: rgba(255,255,255,0.68);
+
+        /* 3D */
+        --shadowA: rgba(0, 0, 0, 0.55);
+        --neon: rgba(0, 255, 209, 0.55);
+      }
+
+      *{ box-sizing:border-box; }
+      html,body{ height:100%; }
+
+      body{
+        margin:0;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        color:var(--text);
+        background-color: var(--bg0);
+
+        background-image:
+          radial-gradient(1200px 600px at 20% 10%, rgba(0,255,209,0.12), transparent 55%),
+          radial-gradient(900px 450px at 90% 30%, rgba(0,140,255,0.12), transparent 50%),
+          linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.00) 40%),
+          repeating-linear-gradient(45deg, rgba(255,255,255,0.035) 0 3px, rgba(0,0,0,0) 3px 8px),
+          repeating-linear-gradient(-45deg, rgba(255,255,255,0.03) 0 2px, rgba(0,0,0,0) 2px 7px);
+
+        background-attachment: fixed;
+        direction: rtl;
+
+        /* 3D: */
+        perspective: 900px;
+      }
+
+      /* ---------- Layout ---------- */
+      .page{
+        max-width: 1050px;
+        margin: 16px auto 40px;
+        padding: 0 16px;
+      }
+
+      /* ---------- Top / Logo centered ---------- */
+      .topbar{
+        padding: 18px 16px 12px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(5,6,8,0.55);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+
+        transform-style: preserve-3d;
+      }
+
+      .brand{
+        max-width: 1050px;
+        margin: 0 auto;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .logo-wrap{
+        width: 72px;
+        height: 72px;
+        border-radius: 18px;
+        background: linear-gradient(145deg, rgba(0,255,209,0.14), rgba(255,255,255,0.04));
+        border: 1px solid rgba(255,255,255,0.12);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-shadow:
+          0 18px 45px rgba(0,0,0,0.45),
+          inset 0 1px 0 rgba(255,255,255,0.08);
+        overflow:hidden;
+        flex: 0 0 auto;
+
+        transform-style: preserve-3d;
+        transform: translateZ(20px);
+      }
+
+      .logo{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display:block;
+      }
+
+      .brand-text{
+        text-align: center;
+        width: 100%;
+        max-width: 760px;
+      }
+
+      .brand-kicker{
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 6px;
+      }
+
+      .brand-title{
+        margin:0;
+        font-size: clamp(18px, 3.2vw, 28px);
+        line-height:1.2;
+        text-shadow: 0 0 18px rgba(0, 255, 209, 0.10);
+      }
+
+      .brand-sub{
+        margin: 10px auto 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height:1.6;
+        max-width: 620px;
+      }
+
+      /* ---------- 3D Hover helpers ---------- */
+      .lift3d{
+        transform-style: preserve-3d;
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, filter .18s ease;
+        box-shadow:
+          0 12px 35px rgba(0,0,0,0.35),
+          inset 0 1px 0 rgba(255,255,255,0.05);
+      }
+
+      .lift3d:hover{
+        transform: translateY(-4px) translateZ(25px);
+        border-color: rgba(0, 255, 209, 0.28);
+        box-shadow:
+          0 22px 55px rgba(0,0,0,0.48),
+          0 0 32px rgba(0,255,209,0.12),
+          inset 0 1px 0 rgba(255,255,255,0.06);
+      }
+
+      /* Cards */
+      .hero{
+        margin-top: 14px;
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(255,255,255,0.10);
+        background: rgba(10, 12, 16, 0.35);
+        backdrop-filter: blur(8px);
+
+        transform-style: preserve-3d;
+      }
+
+      .hero h2{
+        margin: 0 0 8px;
+        font-size: clamp(18px, 2.4vw, 22px);
+      }
+      .hero p{
+        margin:0;
+        color: var(--muted);
+      }
+
+      .links-grid{
+        display:flex;
+        flex-wrap:wrap;
+        gap: 10px;
+        margin-top: 14px;
+        justify-content: center;
+      }
+
+      .chip{
+        text-decoration:none;
+        color: rgba(255,255,255,0.92);
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(10, 12, 16, 0.35);
+        padding: 10px 14px;
+        border-radius: 999px;
+        transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, filter .18s ease;
+        transform-style: preserve-3d;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+      }
+
+      /* 3D hover */
+      .chip:hover{
+        transform: translateY(-3px) translateZ(18px) rotateX(6deg);
+        border-color: rgba(0, 255, 209, 0.55);
+        box-shadow: 0 0 30px rgba(0, 255, 209, 0.14), 0 25px 55px rgba(0,0,0,0.35);
+        filter: saturate(1.15);
+      }
+
+      .card{
+        margin-top: 18px;
+        padding: 18px;
+        border-radius: 18px;
+        background: var(--card);
+        border: 1px solid var(--stroke);
+        backdrop-filter: blur(10px);
+        transform-style: preserve-3d;
+      }
+
+      .card h3{ margin:0 0 6px; }
+      .muted{ color: var(--muted); }
+
+      /* Responsive stats */
+      .stats{
+        display:grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+
+      .stat{
+        padding: 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(0,0,0,0.18);
+        transform-style: preserve-3d;
+      }
+
+      .stat-label{ color: var(--muted); font-size: 13px; }
+      .stat-value{ font-size: 26px; margin-top: 6px; font-weight: 800; }
+      .stat-note{ color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+      .stat-row{
+        display:grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 14px;
+      }
+
+      .stat-mini{
+        padding: 14px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.08);
+        background: rgba(0,0,0,0.18);
+        transform-style: preserve-3d;
+      }
+
+      .stat-mini-title{ font-weight:700; margin-bottom: 10px; }
+
+      .bar{
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,0.08);
+        overflow:hidden;
+      }
+      .bar-fill{
+        height:100%;
+        background: linear-gradient(90deg, rgba(0,255,209,0.95), rgba(0,140,255,0.75));
+        border-radius: 999px;
+        transition: width .25s ease;
+      }
+      .bar-fill.alt{
+        background: linear-gradient(90deg, rgba(255,255,255,0.55), rgba(0,255,209,0.55));
+      }
+
+      /* QR section */
+      .qr-wrap{
+        margin-top: 16px;
+        display:grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        align-items:center;
+        justify-items:center;
+      }
+
+      .qr-card{
+        width: 100%;
+        max-width: 420px;
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(10, 12, 16, 0.35);
+        border: 1px solid rgba(255,255,255,0.10);
+        backdrop-filter: blur(8px);
+
+        text-align:center;
+        transform-style: preserve-3d;
+        box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+      }
+
+      .qr-card h3{
+        margin: 0 0 8px;
+      }
+
+      .qr-img{
+        width: 220px;
+        height: 220px;
+        max-width: 100%;
+        aspect-ratio: 1/1;
+        border-radius: 14px;
+        padding: 10px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        display:block;
+        margin: 8px auto 0;
+        transition: transform .2s ease, box-shadow .2s ease;
+        transform-style: preserve-3d;
+
+        box-shadow: 0 18px 50px rgba(0,0,0,0.35);
+      }
+
+      /* 3D hover */
+      .qr-img:hover{
+        transform: translateY(-3px) translateZ(18px) rotateX(6deg);
+        box-shadow: 0 0 30px rgba(0,255,209,0.14), 0 30px 70px rgba(0,0,0,0.45);
+      }
+
+      /* Packages */
+      .packages{ margin-top: 22px; }
+      .packages h2{ margin: 0 0 8px; text-align:center; }
+
+      .package-grid{
+        margin-top: 14px;
+        display:grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .package{
+        padding: 16px;
+        border-radius: 18px;
+        background: var(--card);
+        border: 1px solid rgba(255,255,255,0.12);
+        backdrop-filter: blur(10px);
+
+        box-shadow:
+          0 12px 35px rgba(0,0,0,0.35),
+          inset 0 1px 0 rgba(255,255,255,0.05);
+
+        transform-style: preserve-3d;
+      }
+
+      .package:hover{
+        transform: translateY(-4px) translateZ(25px);
+        border-color: rgba(0, 255, 209, 0.28);
+        box-shadow:
+          0 22px 55px rgba(0,0,0,0.48),
+          0 0 32px rgba(0,255,209,0.12),
+          inset 0 1px 0 rgba(255,255,255,0.06);
+      }
+
+      .package.featured{
+        border-color: rgba(0, 255, 209, 0.45);
+      }
+
+      .package h3{ margin:0 0 10px; }
+      .price{
+        font-size: 28px;
+        font-weight: 900;
+        margin-bottom: 12px;
+        text-align:center;
+      }
+
+      .list{
+        padding-right: 18px;
+        margin: 0 0 14px;
+        color: var(--muted);
+        line-height:1.8;
+      }
+
+      .btn{
+        display:inline-block;
+        text-decoration:none;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 255, 209, 0.35);
+        background: linear-gradient(180deg, rgba(0,255,209,0.18), rgba(0,0,0,0.0));
+        color: rgba(255,255,255,0.95);
+        font-weight: 700;
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        width: 100%;
+        text-align:center;
+
+        transform-style: preserve-3d;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+      }
+
+      .btn:hover{
+        transform: translateY(-3px) translateZ(18px);
+        border-color: rgba(0, 255, 209, 0.60);
+        box-shadow: 0 0 22px rgba(0, 255, 209, 0.18), 0 30px 70px rgba(0,0,0,0.35);
+      }
+
+      /* Footer */
+      .footer{
+        max-width: 1050px;
+        margin: 0 auto 30px;
+        padding: 0 16px;
+        color: var(--muted);
+        display:flex;
+        justify-content:space-between;
+        gap: 10px;
+        flex-wrap:wrap;
+      }
+
+      .footer-muted{ color: rgba(255,255,255,0.55); }
+
+      /* ---------- Responsive breakpoints ---------- */
+      @media (max-width: 900px){
+        .stats, .stat-row{ grid-template-columns: 1fr; }
+        .package-grid{ grid-template-columns: 1fr; }
+        .brand-sub{ font-size: 13.5px; }
+      }
+
+      @media (max-width: 420px){
+        .page{ padding: 0 12px; }
+        .card{ padding: 14px; }
+        .hero{ padding: 14px; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo-wrap" aria-label="Logo">
+          <img class="logo" src="logo.png" alt="Dr Auto logo" />
+        </div>
+
+        <div class="brand-text">
+          <div class="brand-kicker">Méca | Auto | Moto</div>
+          <h1 class="brand-title">Dr Auto | Car Mechanics Expert</h1>
+          <p class="brand-sub">
+            خبير في الهندسة الميكانيكية الحديثة للسيارات
+            <br />
+            المحتوى الميكانيكي ونصائح العناية بالسيارة
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main class="page">
+      <section class="hero">
+        <h2>Mechanical content and car care tips</h2>
+        <p>expert in modern mechanical engineering for cars</p>
+
+        <div class="links-grid" aria-label="Social links">
+          <a class="chip" href="#" aria-label="Facebook">Facebook</a>
+          <a class="chip" href="#" aria-label="Instagram">Instagram</a>
+          <a class="chip" href="#" aria-label="TikTok">TikTok</a>
+          <a class="chip" href="#" aria-label="WhatsApp">WhatsApp</a>
+          <a class="chip" href="#" aria-label="YouTube">YouTube</a>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>📈 Media Kit</h3>
+        <p class="muted">Overview of Dr Auto's content performance over the last 30 days</p>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-label">👀 Views</div>
+            <div class="stat-value">8.3M</div>
+            <div class="stat-note">+925% compared to previous 30 days</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">🎯 Reach</div>
+            <div class="stat-value">496,008</div>
+            <div class="stat-note">+5,902% increase in reach</div>
+          </div>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-mini">
+            <div class="stat-mini-title">👀 View Source</div>
+            <div class="bar">
+              <div class="bar-fill" style="width: 82.3%"></div>
+            </div>
+            <div class="muted">82.3% From non-followers</div>
+          </div>
+
+          <div class="stat-mini">
+            <div class="stat-mini-title">Followers</div>
+            <div class="bar">
+              <div class="bar-fill alt" style="width: 17.7%"></div>
+            </div>
+            <div class="muted">17.7% from followers</div>
+          </div>
+        </div>
+
+        <!-- QR Code -->
+        <div class="qr-wrap">
+          <div class="qr-card">
+            <h3>QR Code</h3>
+            <p class="muted" style="margin:0;">
+              سيتم فتح الصفحة مباشرة عند المسح
+            </p>
+
+            <!--
+              اختر QR الذي يلائم:
+              - الأفضل: QR من نوع "URL" (لينك http/https) لأنه يفتح صفحة مباشرة في أغلب الهواتف.
+              - ضع رابطك في المتغير QR_URL ثم أنشئ QR عليه (أو ضع qrcode.png مطابقًا للرابط).
+            -->
+            <script>
+              // ✅ غيّر الرابط هنا:
+              const QR_URL = "https://example.com/your-page"; // <-- ضع رابط صفحتك هنا
+              // ملاحظة: لتفعيل "يفتح مباشرة"، لازم QR نفسه يحتوي نفس الرابط.
+              // بما أنك تستخدم صورة qrcode.png، يجب أن تكون هذه الصورة مولدة لنفس QR_URL.
+            </script>
+
+            <!-- ضع qrcode.png مولد على رابط URL أعلاه -->
+            <a id="qrLink" href="https://example.com/your-page" target="_blank" rel="noopener noreferrer" aria-label="Open QR destination">
+              <img class="qr-img" src="qrcode.png" alt="QR Code" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="packages">
+        <h2>🤝 Contact for Collaboration</h2>
+        <p class="muted" style="text-align:center; margin-top:6px;">Professional Content Packages</p>
+
+        <div class="package-grid">
+          <article class="package">
+            <h3>Bronze</h3>
+            <div class="price">199 TND</div>
+            <ul class="list">
+              <li>1 professional reel (30 seconds)</li>
+              <li>2 professional posts with attractive design</li>
+              <li>Upload content on 3 platforms</li>
+            </ul>
+            <a class="btn" href="mailto:dr.automecanique@gmail.com">Contact</a>
+          </article>
+
+          <article class="package featured">
+            <h3>Silver</h3>
+            <div class="price">699 TND</div>
+            <ul class="list">
+              <li>4 professional reels (30 seconds each)</li>
+              <li>8 professional posts with distinctive design</li>
+              <li>Includes a team (filming and editing)</li>
+            </ul>
+            <a class="btn" href="mailto:dr.automecanique@gmail.com">Contact</a>
+          </article>
+
+          <article class="package">
+            <h3>Gold</h3>
+            <div class="price">1999 TND</div>
+            <ul class="list">
+              <li>8 professional reels (30 seconds each)</li>
+              <li>16 professional posts with creative design</li>
+              <li>Includes a professional team (filming, editing, directing)</li>
+            </ul>
+            <a class="btn" href="mailto:dr.automecanique@gmail.com">Contact</a>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>© 2025 Dr Auto. All rights reserved.</div>
+      <div class="footer-muted">dr.automecanique@gmail.com · +216 21 069 001</div>
+    </footer>
+  </body>
+</html>
